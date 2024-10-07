@@ -1,11 +1,7 @@
 #include "sam.h"
+#include "PWM.h"
 
-class PWM {
-public:
-    bool set_PWM(int frequency, int duty_cycle);  // Configures PWM with a frequency and duty cycle
-    bool output_PWM(int port, int pin_number);    // Sets the pin as the output for PWM
-    void configure_timer(int frequency, int duty_cycle); // Helper function for timer configuration
-};
+PWM::PWM(int pin) : pwmPin(pin) {}  // Constructor implementation
 
 bool PWM::output_PWM(int port, int pin_number) {
     // Enable the multiplexer for the given pin (for PWM)

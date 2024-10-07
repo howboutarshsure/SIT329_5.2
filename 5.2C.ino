@@ -1,15 +1,15 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
+#include "PWM.h"  // Include the custom PWM class
 
 char ssid[] = "NETGEAR21";   // your network SSID (name)
 char pass[] = "69699696";    // your network password
 int status = WL_IDLE_STATUS; // the Wifi radio's status
 
 WiFiServer server(80);   // Start server on port 80
-const int pwmPin = 6;     // Pin connected to LED
+PWM pwmController(6);    // Initialize PWM class with pin 6
 
 void setup() {
-    pinMode(pwmPin, OUTPUT);
     Serial.begin(9600);
 
     // Try to connect to WiFi
@@ -17,13 +17,16 @@ void setup() {
         Serial.print("Connecting to SSID: ");
         Serial.println(ssid);
         status = WiFi.begin(ssid, pass);
-        delay(10000);  // wait 10 seconds for connection
+        delay(5000);  // wait 5 seconds for connection
     }
 
     server.begin();  // start the server
     Serial.println("Server is up and running");
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP());
+
+    // Configure the PWM (set frequency to 1000 Hz and duty cycle to 50%)
+    pwmController.configure_timer(1000, 50);
 }
 
 void loop() {
@@ -35,7 +38,7 @@ void loop() {
         int pwmValue = extractPWMValue(request);
 
         if (pwmValue >= 0 && pwmValue <= 255) {
-            analogWrite(pwmPin, pwmValue);  // Set PWM for the LED
+            pwmController.set_PWM(1000, pwmValue);  // Set frequency to 1000 Hz and duty cycle to pwmValue
         }
 
         // Send HTML with Water.css styling

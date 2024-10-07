@@ -1,14 +1,15 @@
-#include "PWM.h"
+#ifndef PWM_H
+#define PWM_H
 
-PWM pwmController;
-const int pwmPin = 6;  // Use pin 6 for PWM
-const int port = 0;    // PORTA is typically port 0
+class PWM {
+public:
+    PWM(int pin);  // Constructor to initialize the pin
+    bool set_PWM(int frequency, int duty_cycle);  // Configures PWM with a frequency and duty cycle
+    bool output_PWM(int port, int pin_number);    // Sets the pin as the output for PWM
+    void configure_timer(int frequency, int duty_cycle); // Helper function for timer configuration
 
-void setup() {
-    pwmController.output_PWM(port, pwmPin);  // Configure pin for PWM output
-    pwmController.set_PWM(1000, 50);         // Set frequency to 1kHz, duty cycle to 50%
-}
+private:
+    int pwmPin; // Store the pin number
+};
 
-void loop() {
-    // Here, you can adjust the PWM settings or perform other operations as needed
-}
+#endif // PWM_H
